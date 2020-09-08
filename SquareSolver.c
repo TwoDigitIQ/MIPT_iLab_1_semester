@@ -29,22 +29,35 @@ void SquareSolver  (struct SquareEquation* squareEquation);
 void LinearSolver  (struct SquareEquation* squareEquation);
 void TrivialSolver (struct SquareEquation* squareEquation);
 
+void ReadEquation  (struct SquareEquation* squareEquation);
+
 void PrintResult (struct SquareEquation* squareEquation);
 void PrintTitle  ();
 
 bool isZero (double value);
 
+void FlushInputBuffer();
+
 int main() {
     PrintTitle();
 
-    printf ("Enter a, b, c coefficients:\n");
-
     struct SquareEquation se;
-    scanf ("%lg %lg %lg", &se.a, &se.b, &se.c);
+    ReadEquation (&se);
 
     SolveSquare (&se);
 
     PrintResult (&se);
+}
+
+void ReadEquation (struct SquareEquation* se) {
+    printf ("Enter a, b, c coefficients:\n");
+    int nReadedAttributes = scanf ("%lg %lg %lg", &(se -> a), &(se -> b), &(se -> c));
+    while (nReadedAttributes != 3) {
+        FlushInputBuffer();
+        printf("Incorrect input!\n");
+        printf ("Enter a, b, c coefficients:\n");
+        nReadedAttributes = scanf ("%lg %lg %lg", &(se -> a), &(se -> b), &(se -> c));
+    }
 }
 
 void SolveSquare (struct SquareEquation* se) {
@@ -52,6 +65,8 @@ void SolveSquare (struct SquareEquation* se) {
     assert (isfinite(se -> a));
     assert (isfinite(se -> b));
     assert (isfinite(se -> c));
+
+    assert (se != NULL);
 
     if (!isZero(se -> a)) {
         SquareSolver (se);
@@ -82,7 +97,7 @@ void SquareSolver (struct SquareEquation* se) {
 
     else {
         double sqrtDiscr = sqrt(discriminant);
-         se -> firstRoot = (-(se -> b) + sqrtDiscr) / (2 * (se -> a));
+        se -> firstRoot  = (-(se -> b) + sqrtDiscr) / (2 * (se -> a));
         se -> secondRoot = (-(se -> b) - sqrtDiscr) / (2 * (se -> a));
         se -> nRoots = TWO_ROOTS;
     }
@@ -119,9 +134,17 @@ void PrintResult (struct SquareEquation* se) {
         case INF_ROOTS:
             printf ("Any number is root\n");
             break;
+        default:
+            printf ("Something going totally wrong!\n");
     }
 }
 
 void PrintTitle() {
     printf ("Square equation solver.\n\n");
+}
+
+void FlushInputBuffer() {
+    for (int c = getchar();
+         c != '\n' && c != EOF;
+         c = getchar());
 }
