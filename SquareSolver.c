@@ -84,7 +84,7 @@ void SolveSquare (struct SquareEquation* se) {
 }
 
 void SquareSolver (struct SquareEquation* se) {
-    double discriminant = (se -> b) * (se -> b) - 4 * (se -> a) * (se -> c);
+    const double discriminant = (se -> b) * (se -> b) - 4 * (se -> a) * (se -> c);
 
     if (discriminant < 0) {
         se -> nRoots = NO_ROOTS;
@@ -96,7 +96,7 @@ void SquareSolver (struct SquareEquation* se) {
     }
 
     else {
-        double sqrtDiscr = sqrt(discriminant);
+        const double sqrtDiscr = sqrt(discriminant);
         se -> firstRoot  = (-(se -> b) + sqrtDiscr) / (2 * (se -> a));
         se -> secondRoot = (-(se -> b) - sqrtDiscr) / (2 * (se -> a));
         se -> nRoots = TWO_ROOTS;
